@@ -6,7 +6,7 @@ using UnityEngine;
 public class HelloWorld : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
-        GrowingIOGame.Start("0a1b4118dd954ec3bcc69da5138bdb96", "growing.d0823191073f2fbe");
+        Debug.Log("Unity Start");
     }
 
     // Update is called once per frame
