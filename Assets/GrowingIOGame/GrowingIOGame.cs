@@ -64,7 +64,29 @@ public class GrowingIOGame {
     [DllImport("__Internal")]
     private static extern void gioClearUserId();
 
-#endif 
+    private class GIOIOSObject
+    {
+        public List<string> keys;
+        public List<string> values;
+    }
+
+    private static GIOIOSObject DicToObject(Dictionary<string, string> variable)
+    {
+        GIOIOSObject gioObject = new GIOIOSObject();
+        gioObject.keys = new List<string>();
+        gioObject.values = new List<string>();
+        if (variable != null && variable.Count > 0)
+        {
+            foreach (KeyValuePair<string, string> kvp in variable)
+            {
+                gioObject.keys.Add(kvp.Key);
+                gioObject.values.Add((string)kvp.Value);
+            }
+        }
+        return gioObject;
+    }
+
+#endif
 
     public static void Track(string eventId) {
 
@@ -97,16 +119,7 @@ public class GrowingIOGame {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
         #if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
-                int count = variable.Count;
-                string[] keys = new string[count];
-                string[] stringValues = new string[count];
-                int index = 0;
-                foreach (KeyValuePair<string, string> kvp in variable) {
-                    keys[index] = kvp.Key;
-                    stringValues[index] = (string)kvp.Value;
-                    index++;
-                }
-                gioTrackWithVariable(eventId, keys, stringValues, count);
+                gioTrackWithVariable(eventId, DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
             } else {
                 gioTrack(eventId);
             }
@@ -123,16 +136,7 @@ public class GrowingIOGame {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
         #if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
-                int count = variable.Count;
-                string[] keys = new string[count];
-                string[] stringValues = new string[count];
-                int index = 0;
-                foreach (KeyValuePair<string, string> kvp in variable) {
-                    keys[index] = kvp.Key;
-                    stringValues[index] = (string)kvp.Value;
-                    index++;
-                }
-                gioTrackWithNumberAndVariable(eventId, number, keys, stringValues, count);
+                gioTrackWithNumberAndVariable(eventId, number, DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
             } else {
                 gioTrackWithNumber(eventId, number);
             }
@@ -175,16 +179,7 @@ public class GrowingIOGame {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
         #if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
-                int count = variable.Count;
-                string[] keys = new string[count];
-                string[] stringValues = new string[count];
-                int index = 0;
-                foreach (KeyValuePair<string, string> kvp in variable) {
-                    keys[index] = kvp.Key;
-                    stringValues[index] = (string)kvp.Value;
-                    index++;
-                }
-                gioSetEvar(keys, stringValues, count);
+                gioSetEvar(DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
             }
         #endif
         #if UNITY_ANDROID
@@ -224,16 +219,7 @@ public class GrowingIOGame {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
         #if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
-                int count = variable.Count;
-                string[] keys = new string[count];
-                string[] stringValues = new string[count];
-                int index = 0;
-                foreach (KeyValuePair<string, string> kvp in variable) {
-                    keys[index] = kvp.Key;
-                    stringValues[index] = (string)kvp.Value;
-                    index++;
-                }
-                 gioSetPeople(keys, stringValues, count);
+                 gioSetPeople(DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
             }
         #endif
         #if UNITY_ANDROID
@@ -248,16 +234,7 @@ public class GrowingIOGame {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
         #if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
-                int count = variable.Count;
-                string[] keys = new string[count];
-                string[] stringValues = new string[count];
-                int index = 0;
-                foreach (KeyValuePair<string, string> kvp in variable) {
-                    keys[index] = kvp.Key;
-                    stringValues[index] = (string)kvp.Value;
-                    index++;
-                }
-                gioSetVistor(keys, stringValues, count);
+                gioSetVistor(DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
             }
         #endif
         #if UNITY_ANDROID
