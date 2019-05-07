@@ -90,3 +90,19 @@ public class UnityActivity extends UnityPlayerActivity {
     </application>
 </manifest>
 ```
+#### iOS端
+
+1. 将最新的埋点SDK `GrowingCoreKit.framework` 导入 Unity 项目目录 `Assets/Plugins/iOS/` 中
+2. 将 `BuildPostProcessor` 脚本文件导入 Unity 项目目录 `Assets/Editor`中  
+3. 配置 URLScheme：将在GrowingIO官网申请到的应用的 `URL Scheme` 填入到 `BuildPostProcessor` 中的 `AddInfoPlist(path, "XXX");` XXX 处并保存
+4. Unity 工程中可以通过 `GrowingIOGame.cs`脚本调用指定的埋点方法
+5. 初始化埋点SDK:Unity 导出 Xcode 工程后，通过在GrowingIO官网申请到项目ID，在 `UnityAppController.mm` 文件中的代码方法中完成初始化
+
+```objc
+- (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
+{
+     [Growing startWithAccountId:@"xxxxx"];
+     return YES;
+}
+
+```
