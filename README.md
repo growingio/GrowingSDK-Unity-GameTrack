@@ -41,3 +41,4 @@ public class GameApp extends Application {
 }
 
 ```
+6. 更多细节请参考[UnityDemo](https://github.com/growingio/GrowingSDK-Unity-GameTrack/tree/master/UnityDemo)和[iOS原生端埋点SDK文档](https://docs.growingio.com/docs/sdk-integration/ios-sdk-1/mai-dian-sdk-ji-cheng)
