@@ -7,14 +7,11 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.iOS.Xcode;
 
-public class BuildPostProcessor
-{
+public class BuildPostProcessor {
 
     [PostProcessBuildAttribute(1)]
-    public static void OnPostProcessBuild(BuildTarget target, string path)
-    {
-        if (target == BuildTarget.iOS)
-        {
+    public static void OnPostProcessBuild(BuildTarget target, string path) {
+        if (target == BuildTarget.iOS) {
             // Read.
             string projectPath = PBXProject.GetPBXProjectPath(path);
             PBXProject project = new PBXProject();
@@ -32,15 +29,14 @@ public class BuildPostProcessor
             AddLibraries(project, targetGUID);
 
             //  InfoPlist
-            AddInfoPlist(path, "growing.f8f234f19af6c96b");
+            AddInfoPlist(path, "XXXXX");
 
             // Write.
             File.WriteAllText(projectPath, project.WriteToString());
         }
     }
 
-    static void AddFrameworks(PBXProject project, string targetGUID)
-    {
+    static void AddFrameworks(PBXProject project, string targetGUID) {
 
         project.AddFrameworkToProject(targetGUID, "Security.framework", false);
         project.AddFrameworkToProject(targetGUID, "CoreTelephony.framework", false);
@@ -51,16 +47,14 @@ public class BuildPostProcessor
         project.AddFrameworkToProject(targetGUID, "WebKit.framework", false);
     }
 
-    static void AddLibraries(PBXProject project, string targetGUID)
-    {
+    static void AddLibraries(PBXProject project, string targetGUID) {
         string fileGuidSqlite = project.AddFile("usr/lib/libsqlite3.tbd", "Libraries/libsqlite3.tbd", PBXSourceTree.Sdk);
         project.AddFileToBuild(targetGUID, fileGuidSqlite);
         string fileGuidLibz = project.AddFile("usr/lib/libicucore.tbd", "Libraries/libicucore.tbd", PBXSourceTree.Sdk);
         project.AddFileToBuild(targetGUID, fileGuidLibz);
     }
 
-    static void AddInfoPlist(string path, string URLSchemeString)
-    {
+    static void AddInfoPlist(string path, string URLSchemeString) {
 
         var plistPath = Path.Combine(path, "Info.plist");
         var plist = new PlistDocument();

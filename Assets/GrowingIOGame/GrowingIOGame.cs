@@ -64,21 +64,17 @@ public class GrowingIOGame {
     [DllImport("__Internal")]
     private static extern void gioClearUserId();
 
-    private class GIOIOSObject
-    {
+    private class GIOIOSObject {
         public List<string> keys;
         public List<string> values;
     }
 
-    private static GIOIOSObject DicToObject(Dictionary<string, string> variable)
-    {
+    private static GIOIOSObject DicToObject(Dictionary<string, string> variable) {
         GIOIOSObject gioObject = new GIOIOSObject();
         gioObject.keys = new List<string>();
         gioObject.values = new List<string>();
-        if (variable != null && variable.Count > 0)
-        {
-            foreach (KeyValuePair<string, string> kvp in variable)
-            {
+        if (variable != null && variable.Count > 0) {
+            foreach (KeyValuePair<string, string> kvp in variable) {
                 gioObject.keys.Add(kvp.Key);
                 gioObject.values.Add((string)kvp.Value);
             }
