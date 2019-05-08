@@ -1,10 +1,13 @@
-# GrowigIO Unity Demo
+
+# GrowingSDK-Unity-GameTrack
+GrowingIO Unity 平台埋点SDK
+
 ### 一. 介绍
 
 ### 二. 集成步骤
 #### Android 端
-1. 将最新的Unity埋点SDK `vds-android-agent-game-track-x.x.x.aar`导入 Unity 项目目录`Assets/Plugins/Android/`
-2. 在Android工程的`Application`的`onCreate`方法中初始化GrowingIO。如果没有`Application`类请添加一个。
+1. 将最新的Unity埋点SDK `vds-android-agent-game-track.jar`导入 Unity 项目目录`Assets/Plugins/Android/`
+2. 在Android工程的`Application`的`onCreate`方法中初始化GrowingIO
 ```java
 public class GameApp extends Application {
     @Override
