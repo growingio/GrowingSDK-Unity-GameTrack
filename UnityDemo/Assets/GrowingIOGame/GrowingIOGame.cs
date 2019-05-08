@@ -47,13 +47,13 @@ public class GrowingIOGame {
     private static extern void gioTrackWithNumber(string eventId, double number);
 
     [DllImport("__Internal")]
-    private static extern void gioTrackWithNumberAndVariable(string eventId, double number, string[] keys, string[] stringValues, int count);
+    private static extern void gioTrackWithNumberAndVariable(string eventId, double number, string[] keys, string[] stringValues, double[] numberValues, int count);
 
     [DllImport("__Internal")]
-    private static extern void gioTrackWithVariable(string eventId, string[] keys, string[] stringValues, int count);
+    private static extern void gioTrackWithVariable(string eventId, string[] keys, string[] stringValues, double[] numberValues, int count);
 
     [DllImport("__Internal")]
-    private static extern void gioSetEvar(string[] keys, string[] stringValues, int count);
+    private static extern void gioSetEvar(string[] keys, string[] stringValues, double[] numberValues, int count);
 
     [DllImport("__Internal")]
     private static extern void gioSetEvarWithKeyAndString(string key, string stringValue);
@@ -62,7 +62,7 @@ public class GrowingIOGame {
     private static extern void gioSetEvarWithKeyAndNumber(string key, double number);
 
     [DllImport("__Internal")]
-    private static extern void gioSetPeople(string[] keys, string[] stringValues, int count);
+    private static extern void gioSetPeople(string[] keys, string[] stringValues, double[] numberValues, int count);
 
     [DllImport("__Internal")]
     private static extern void gioSetPeopleWithKeyAndString(string key, string stringValue);
@@ -71,7 +71,7 @@ public class GrowingIOGame {
     private static extern void gioSetPeopleWithKeyAndNumber(string key, double number);
 
     [DllImport("__Internal")]
-    private static extern void gioSetVistor(string[] keys, string[] stringValues, int count);
+    private static extern void gioSetVistor(string[] keys, string[] stringValues, double[] numberValues, int count);
 
     [DllImport("__Internal")]
     private static extern void gioSetUserId(string userId);
@@ -79,23 +79,32 @@ public class GrowingIOGame {
     [DllImport("__Internal")]
     private static extern void gioClearUserId();
 
-    private class GIOIOSObject
-    {
-        public List<string> keys;
-        public List<string> values;
+    private class GIOIOSObject {
+        public string[] keys;
+        public string[] values;
+        public double[] numbers;
+        
     }
 
-    private static GIOIOSObject DicToObject(Dictionary<string, string> variable)
-    {
+    private static GIOIOSObject DicToObject(Dictionary<string, object> variable) {
         GIOIOSObject gioObject = new GIOIOSObject();
-        gioObject.keys = new List<string>();
-        gioObject.values = new List<string>();
-        if (variable != null && variable.Count > 0)
-        {
-            foreach (KeyValuePair<string, string> kvp in variable)
-            {
-                gioObject.keys.Add(kvp.Key);
-                gioObject.values.Add((string)kvp.Value);
+        gioObject.keys = new String[variable.Count];
+        gioObject.values = new String[variable.Count];
+        gioObject.numbers = new double[variable.Count];
+        int index = 0;
+        if (variable != null && variable.Count > 0) {
+            foreach (KeyValuePair<string, object> kvp in variable) {
+                gioObject.keys[index] = kvp.Key;
+                if (kvp.Value is string) {
+                    gioObject.values[index] = (string)kvp.Value;
+                }
+                else if (kvp.Value is ValueType) {
+                    gioObject.numbers[index] = System.Convert.ToDouble(kvp.Value);
+                }
+                else {
+                    gioObject.values[index] = System.Convert.ToString(kvp.Value);
+                }
+                index++;
             }
         }
         return gioObject;
@@ -129,7 +138,7 @@ public class GrowingIOGame {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
 #if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
-                gioTrackWithVariable(eventId, DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
+                gioTrackWithVariable(eventId, DicToObject(variable).keys, DicToObject(variable).values, DicToObject(variable).numbers, variable.Count);
             } else {
                 gioTrack(eventId);
             }
@@ -144,7 +153,7 @@ public class GrowingIOGame {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
 #if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
-                gioTrackWithNumberAndVariable(eventId, number, DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
+                gioTrackWithNumberAndVariable(eventId, number, DicToObject(variable).keys, DicToObject(variable).values, DicToObject(variable).numbers, variable.Count);
             } else {
                 gioTrackWithNumber(eventId, number);
             }
@@ -181,7 +190,7 @@ public class GrowingIOGame {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
 #if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
-                gioSetEvar(DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
+                gioSetEvar(DicToObject(variable).keys, DicToObject(variable).values, DicToObject(variable).numbers, variable.Count);
             }
 #endif
 #if UNITY_ANDROID
@@ -216,7 +225,7 @@ public class GrowingIOGame {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
 #if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
-                 gioSetPeople(DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
+                 gioSetPeople(DicToObject(variable).keys, DicToObject(variable).values, DicToObject(variable).numbers, variable.Count);
             }
 #endif
 #if UNITY_ANDROID
@@ -229,7 +238,7 @@ public class GrowingIOGame {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
 #if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
-                gioSetVistor(DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
+                gioSetVistor(DicToObject(variable).keys, DicToObject(variable).values, DicToObject(variable).numbers, variable.Count);
             }
 #endif
 #if UNITY_ANDROID
