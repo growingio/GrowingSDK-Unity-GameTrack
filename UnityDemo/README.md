@@ -32,3 +32,20 @@ public class UnityActivity extends UnityPlayerActivity {
     }
 }
 ```
+
+### iOS 端
+
+1. Unity 工程项目中可直接调用 `GrowingIOGame.cs`中的公共方法实现埋点
+2. Unity 工程导出 Xcode 工程时，需要在 `UnityAppController.mm` 文件中的如下方法调用 `startWithAccountId:`方法实现埋点SDK的启动,
+
+```objc
+- (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
+{
+
+    [Growing startWithAccountId:@"XXXXX"];// XXXXX为GrowingIO官网申请的项目ID
+    
+    return YES;
+}
+
+```
+3. 配置 URLScheme：将在GrowingIO官网申请到的应用的 URL Scheme 填入到 BuildPostProcessor 中的 AddInfoPlist(path, "XXXXX"); XXXXX 处并保存，其注意事项请参考[iOS原生端埋点SDK文档](https://docs.growingio.com/docs/sdk-integration/ios-sdk-1/mai-dian-sdk-ji-cheng)
