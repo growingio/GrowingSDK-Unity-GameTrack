@@ -36,7 +36,7 @@ public class UnityActivity extends UnityPlayerActivity {
 ### iOS 端
 
 1. Unity 工程项目中可直接调用 `GrowingIOGame.cs`中的公共方法实现埋点
-2. Unity 工程导出 Xcode 工程时，需要在 `UnityAppController.mm` 文件中的如下方法调用 `startWithAccountId:`方法实现埋点SDK的启动,
+2. Unity 工程导出 Xcode 工程时，需要在 `UnityAppController.mm` 文件中的如下方法调用 `startWithAccountId:`方法实现埋点SDK的启动
 
 ```objc
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
