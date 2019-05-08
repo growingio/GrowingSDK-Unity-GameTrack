@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.unity3d.player"
+    package="${您的APP包名}"
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="preferExternal">
 
+   <!--非危险权限，不需要运行时请求，Manifest文件中添加即可-->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <!--非危险权限，不需要运行时请求，Manifest文件中添加即可-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -19,11 +19,11 @@
         android:anyDensity="true"/>
 
     <application
-        android:name="com.growingio.android.sdk.game.GameApp"
+        android:name="${您的Application类}"
         android:theme="@style/UnityThemeSelector"
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name">
-        <activity android:name="com.growingio.android.sdk.game.UnityActivity"
+        <activity android:name="${您的LAUNCHER Activity类}"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -31,7 +31,7 @@
             </intent-filter>
             <!--请添加这里的整个 intent-filter 区块，并确保其中只有一个 data 字段-->
             <intent-filter>
-                <data android:scheme="growing.d0823191073f2fbe"/>
+                <data android:scheme="${您的URL Scheme}"/>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>

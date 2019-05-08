@@ -6,7 +6,6 @@ using UnityEngine;
 public class HelloWorld : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
-
         Debug.Log("Unity Start");
     }
 
@@ -35,12 +34,12 @@ public class HelloWorld : MonoBehaviour {
 
         y = y + buttonHeight + 10;
         if (GUI.Button(new Rect(leftX, y, buttonWidth, buttonHeight), "Track Dictionary")) {
-            Dictionary<string, string> dictionary = new Dictionary<string, string> {{"key1", "value1"}, {"key2", "value2"}};
+            Dictionary<string, object> dictionary = new Dictionary<string, object> {{"key1", "value1"}, {"key2", 111}, {"key3", false}};
             GrowingIOGame.Track("DictionaryTrack", dictionary);
         }
 
         if (GUI.Button(new Rect(rightX, y, buttonWidth, buttonHeight), "Track Number Dictionary")) {
-            Dictionary<string, string> dictionary = new Dictionary<string, string> {{"key1", "value1"}, {"key2", "value2"}};
+            Dictionary<string, object> dictionary = new Dictionary<string, object> {{"key1", "value1"}, {"key2", 111.11}};
             GrowingIOGame.Track("NumberDictionaryTrack", 66.66, dictionary);
         }
 
@@ -55,7 +54,7 @@ public class HelloWorld : MonoBehaviour {
 
         y = y + buttonHeight + 10;
         if (GUI.Button(new Rect(leftX, y, buttonWidth, buttonHeight), "Set Evar Dictionary")) {
-            Dictionary<string, string> dictionary = new Dictionary<string, string> {{"EvarKey1", "EvarValue1"}, {"EvarKey2", "EvarValue2"}};
+            Dictionary<string, object> dictionary = new Dictionary<string, object> {{"EvarKey1", "EvarValue1"}, {"EvarKey2", true}};
             GrowingIOGame.SetEvar(dictionary);
         }
 
@@ -69,13 +68,13 @@ public class HelloWorld : MonoBehaviour {
         }
 
         if (GUI.Button(new Rect(rightX, y, buttonWidth, buttonHeight), "Set People Dictionary")) {
-            Dictionary<string, string> dictionary = new Dictionary<string, string> {{"PeopleKey1", "PeopleValue1"}, {"PeopleKey2", "PeopleValue2"}};
+            Dictionary<string, object> dictionary = new Dictionary<string, object> {{"PeopleKey1", "PeopleValue1"}, {"PeopleKey2", 6.66}};
             GrowingIOGame.SetPeopleVariable(dictionary);
         }
 
         y = y + buttonHeight + 10;
         if (GUI.Button(new Rect(leftX, y, buttonWidth, buttonHeight), "Set Visitor Dictionary")) {
-            Dictionary<string, string> dictionary = new Dictionary<string, string> {{"VisitorKey1", "VisitorValue1"}, {"VisitorKey2", "VisitorValue2"}};
+            Dictionary<string, object> dictionary = new Dictionary<string, object> {{"VisitorKey1", "VisitorValue1"}, {"VisitorKey2", false}};
             GrowingIOGame.SetVisitor(dictionary);
         }
 

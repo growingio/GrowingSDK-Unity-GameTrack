@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
@@ -5,15 +6,30 @@ using System.Runtime.InteropServices;
 public class GrowingIOGame {
 #if UNITY_ANDROID
 
-        private static string ANDROID_CLASS = "com.growingio.android.plugin.game.GrowingIOGame";
-        private static AndroidJavaObject dicToMap(Dictionary<string, string> dictionary) {
+    private static string ANDROID_CLASS = "com.growingio.android.plugin.game.GrowingIOGame";
+
+    private static AndroidJavaObject dicToMap(Dictionary<string, object> dictionary) {
         if (dictionary == null) {
             return null;
         }
 
         AndroidJavaObject map = new AndroidJavaObject("java.util.HashMap");
-        foreach (KeyValuePair<string, string> pair in dictionary) {
-            map.Call<string>("put", pair.Key, pair.Value);
+        foreach (KeyValuePair<string, object> pair in dictionary) {
+            object value;
+            if (pair.Value is string) {
+                value = pair.Value;
+            }
+            else if (pair.Value is bool) {
+                value = new AndroidJavaObject("java.lang.Boolean", pair.Value);
+            }
+            else if (pair.Value is ValueType) {
+                value = new AndroidJavaObject("java.lang.Double", pair.Value.ToString());
+            }
+            else {
+                value = pair.Value.ToString();
+            }
+
+            map.Call<AndroidJavaClass>("put", pair.Key, value);
         }
 
         return map;
@@ -22,7 +38,6 @@ public class GrowingIOGame {
 #endif
 
 #if UNITY_IPHONE
-
         /* Interface to native implementation */
 
     [DllImport("__Internal")]
@@ -89,181 +104,159 @@ public class GrowingIOGame {
 #endif
 
     public static void Track(string eventId) {
-
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-            #if UNITY_IPHONE
+#if UNITY_IPHONE
                 gioTrack(eventId);
-            #endif
-            #if UNITY_ANDROID
-                new AndroidJavaClass(ANDROID_CLASS).CallStatic("track", eventId);
-            #endif
-        } 
-
+#endif
+#if UNITY_ANDROID
+            new AndroidJavaClass(ANDROID_CLASS).CallStatic("track", eventId);
+#endif
+        }
     }
 
     public static void Track(string eventId, double number) {
-
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+#if UNITY_IPHONE
             gioTrackWithNumber(eventId, number);
-        #endif
-        #if UNITY_ANDROID
-             new AndroidJavaClass(ANDROID_CLASS).CallStatic("track", eventId, number);
-        #endif
+#endif
+#if UNITY_ANDROID
+            new AndroidJavaClass(ANDROID_CLASS).CallStatic("track", eventId, number);
+#endif
         }
-
     }
 
-    public static void Track(string eventId, Dictionary<string, string> variable) {
-
+    public static void Track(string eventId, Dictionary<string, object> variable) {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+#if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
                 gioTrackWithVariable(eventId, DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
             } else {
                 gioTrack(eventId);
             }
-        #endif
-        #if UNITY_ANDROID
+#endif
+#if UNITY_ANDROID
             new AndroidJavaClass(ANDROID_CLASS).CallStatic("track", eventId, dicToMap(variable));
-        #endif
+#endif
         }
-
     }
 
-    public static void Track(string eventId, double number, Dictionary<string, string> variable) {
-
+    public static void Track(string eventId, double number, Dictionary<string, object> variable) {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+#if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
                 gioTrackWithNumberAndVariable(eventId, number, DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
             } else {
                 gioTrackWithNumber(eventId, number);
             }
-        #endif
-        #if UNITY_ANDROID
+#endif
+#if UNITY_ANDROID
             new AndroidJavaClass(ANDROID_CLASS).CallStatic("track", eventId, number, dicToMap(variable));
-        #endif
+#endif
         }
-          
     }
 
     public static void SetEvar(string key, string value) {
-
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+#if UNITY_IPHONE
              gioSetEvarWithKeyAndString(key, value);
-        #endif
-        #if UNITY_ANDROID
-             new AndroidJavaClass(ANDROID_CLASS).CallStatic("setEvar", key, value);
-        #endif
+#endif
+#if UNITY_ANDROID
+            new AndroidJavaClass(ANDROID_CLASS).CallStatic("setEvar", key, value);
+#endif
         }
-
     }
 
     public static void SetEvar(string key, double number) {
-
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+#if UNITY_IPHONE
             gioSetEvarWithKeyAndNumber(key, number);
-        #endif
-        #if UNITY_ANDROID
-           new AndroidJavaClass(ANDROID_CLASS).CallStatic("setEvar", key, number);
-        #endif
+#endif
+#if UNITY_ANDROID
+            new AndroidJavaClass(ANDROID_CLASS).CallStatic("setEvar", key, number);
+#endif
         }
-        
     }
 
-    public static void SetEvar(Dictionary<string, string> variable) {
-
+    public static void SetEvar(Dictionary<string, object> variable) {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+#if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
                 gioSetEvar(DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
             }
-        #endif
-        #if UNITY_ANDROID
-             new AndroidJavaClass(ANDROID_CLASS).CallStatic("setEvar", dicToMap(variable));
-        #endif
+#endif
+#if UNITY_ANDROID
+            new AndroidJavaClass(ANDROID_CLASS).CallStatic("setEvar", dicToMap(variable));
+#endif
         }
-        
     }
 
     public static void SetPeopleVariable(string key, string value) {
-
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+#if UNITY_IPHONE
             gioSetPeopleWithKeyAndString(key, value);
-        #endif
-        #if UNITY_ANDROID
+#endif
+#if UNITY_ANDROID
             new AndroidJavaClass(ANDROID_CLASS).CallStatic("setPeopleVariable", key, value);
-        #endif
+#endif
         }
-
     }
 
     public static void SetPeopleVariable(string key, double number) {
-
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+#if UNITY_IPHONE
             gioSetPeopleWithKeyAndNumber(key, number);
-        #endif
-        #if UNITY_ANDROID
+#endif
+#if UNITY_ANDROID
             new AndroidJavaClass(ANDROID_CLASS).CallStatic("setPeopleVariable", key, number);
-        #endif
+#endif
         }
-        
     }
 
-    public static void SetPeopleVariable(Dictionary<string, string> variable) {
+    public static void SetPeopleVariable(Dictionary<string, object> variable) {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+#if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
                  gioSetPeople(DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
             }
-        #endif
-        #if UNITY_ANDROID
+#endif
+#if UNITY_ANDROID
             new AndroidJavaClass(ANDROID_CLASS).CallStatic("setPeopleVariable", dicToMap(variable));
-        #endif
+#endif
         }
-        
     }
 
-    public static void SetVisitor(Dictionary<string, string> variable) {
-
+    public static void SetVisitor(Dictionary<string, object> variable) {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+#if UNITY_IPHONE
             if (variable != null && variable.Count > 0) {
                 gioSetVistor(DicToObject(variable).keys.ToArray(), DicToObject(variable).values.ToArray(), variable.Count);
             }
-        #endif
-        #if UNITY_ANDROID
+#endif
+#if UNITY_ANDROID
             new AndroidJavaClass(ANDROID_CLASS).CallStatic("setVisitor", dicToMap(variable));
-        #endif
+#endif
         }
-
     }
 
     public static void SetUserId(string userId) {
-         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+        if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
+#if UNITY_IPHONE
             gioSetUserId(userId);
-        #endif
-        #if UNITY_ANDROID
+#endif
+#if UNITY_ANDROID
             new AndroidJavaClass(ANDROID_CLASS).CallStatic("setUserId", userId);
-        #endif
+#endif
         }
-        
     }
 
     public static void ClearUserId() {
         if (Application.platform != RuntimePlatform.OSXEditor && Application.platform != RuntimePlatform.WindowsEditor) {
-        #if UNITY_IPHONE
+#if UNITY_IPHONE
             gioClearUserId();
-        #endif
-        #if UNITY_ANDROID
-             new AndroidJavaClass(ANDROID_CLASS).CallStatic("clearUserId");
-        #endif
-        }       
+#endif
+#if UNITY_ANDROID
+            new AndroidJavaClass(ANDROID_CLASS).CallStatic("clearUserId");
+#endif
+        }
     }
 }
