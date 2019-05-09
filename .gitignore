@@ -36,3 +36,7 @@ sysinfo.txt
 *.unitypackage
 
 .idea
+
+# .DS_Store
+.DS_Store
+*/.DS_Store
