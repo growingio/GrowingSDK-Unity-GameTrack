@@ -4,6 +4,133 @@ GrowingIO Unity 平台埋点SDK
 
 ### 一. 介绍
 
+#### API列表
+
+**事件类型以及对应函数如下**
+
+1. track：发送自定义事件，对应于`cstm`事件，提供以下4个函数：
+    ```C#
+    public static void Track(string eventId)
+    public static void Track(string eventId, double number)
+    public static void Track(string eventId, Dictionary<string, object> variable)
+    public static void Track(string eventId, double number, Dictionary<string, object> variable)
+    ```
+2. setEvar：发送转化变量，对应于`evar` 事件，提供以下3个函数：
+    
+    ```C#
+    public static void SetEvar(string key, string value)
+    public static void SetEvar(string key, double number)
+    public static void SetEvar(Dictionary<string, object> variable)
+    ```
+3. setPeopleVariable：发送用户变量，对应于`ppl`事件，提供以下3个函数：
+    
+    ```C#
+    public static void SetPeopleVariable(string key, string value)
+    public static void SetPeopleVariable(string key, double number)
+    public static void SetPeopleVariable(Dictionary<string, object> variable)
+    ```
+4. setVisitor：设置访问用户变量，对应于`vstr`事件，提供函数如下：
+    
+    ```C#
+    public static void SetVisitor(Dictionary<string, object> variable)
+    ```
+
+5. setUserId：设置登录用户Id，对应于`cs1`字段，提供函数如下：
+    
+    ```C#
+    public static void SetUserId(string userId)
+    ```
+
+6. clearUserId：清除登录用户Id，提供函数如下：
+    
+    ```C#
+    public static void ClearUserId()
+    ```
+
+**参数限制条件**
+
+ 参数名称   | 限制条件
+ ---    |---  | -------- 
+ eventId  | 非空，长度限制小于等于50。
+ number   | 非空。
+ variable | value 传入`string` 或者基本数值类型，对于嵌套的对应，会统一转换成`string`,key 长度限制小于等于50，value长度小于等于1000。
+ userId   | 长度限制小于等于1000；如果值为空则清空了登录用户变量，不建议这么用，请使用 clearUserId 清除登录用户变量。
+
+**调用示例**
+
+`Unity`通过`GrowingIOGame`类的函数来调用`Native`的埋点API，调用方式如下：
+
+```C#
+    
+    //Track 设置自定义事件
+    GrowingIOGame.Track("StringTrack");
+    GrowingIOGame.Track("NumberTrack", 10);
+    
+    //Track 设置自定义事件，传递字典参数
+    Dictionary<string, object> dictionary = new Dictionary<string, object> {{"key1", "value1"}, {"key2", 111}, {"key3", false}};
+    GrowingIOGame.Track("DictionaryTrack", dictionary);
+
+    Dictionary<string, object> dictionary = new Dictionary<string, object> {{"key1", "value1"}, {"key2", 111.11}};
+    GrowingIOGame.Track("NumberDictionaryTrack", 66.66, dictionary);
+    
+    //SetEvar 设置转化变量
+    GrowingIOGame.SetEvar("EvarStringKey", "EvarString");
+    GrowingIOGame.SetEvar("EvarNumberKey", "100");
+    
+    //SetEvar 设置转化变量，传递字典参数
+    Dictionary<string, object> dictionary = new Dictionary<string, object> {{"EvarKey1", "EvarValue1"}, {"EvarKey2", true}};
+    GrowingIOGame.SetEvar(dictionary);
+    
+    //SetPeopleVariable 设置用户变量
+    GrowingIOGame.SetPeopleVariable("PeopleStringKey", "PeopleString");
+    GrowingIOGame.SetPeopleVariable("PeopleNumberKey", "PeopleNumber");
+    
+    //SetPeopleVariable 设置用户变量，传递字典参数
+    Dictionary<string, object> dictionary = new Dictionary<string, object> {{"PeopleKey1", "PeopleValue1"}, {"PeopleKey2", 6.66}};
+    GrowingIOGame.SetPeopleVariable(dictionary);
+    
+    //SetVisitor 设置访问用户变量，传递字典参数
+    Dictionary<string, object> dictionary = new Dictionary<string, object> {{"VisitorKey1", "VisitorValue1"}, {"VisitorKey2", false}};
+    GrowingIOGame.SetVisitor(dictionary);
+    
+    //SetUserId 设置登录用户名称
+    GrowingIOGame.SetUserId("张三");
+    
+    //ClearId 清除登录用户名称
+    GrowingIOGame.ClearUserId();
+            
+```
+
+**验证SDK是否正常工作**
+
+##### 验证内容
+
+1. 验证打点事件是否发送成功
+
+##### 验证工具
+1. `Unity`导出原生应用后，利用`Mobile Debuuger`查看
+2. `Android`查看日志：设置`TestMode`和`DebugMode`:
+
+```Java
+GrowingIO.startWithConfiguration(this,new Configuration()
+    //BuildConfig.DEBUG 这样配置就不会上线忘记关闭
+    .setDebugMode(BuildConfig.DEBUG)
+    .setTestMode(true)
+    ...
+    );
+```
+3. iOS查看日志：iOS在`UnityAppController.mm` 文件中如下方法中打开日志：
+
+```OC
+- (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
+{
+    //打开日志
+    [Growing setEnableLog:YES];
+    return YES;
+}
+
+```
+
 ### 二. 集成步骤
 #### Android 端
 1. 将最新的Unity埋点SDK `vds-android-agent-game-track.jar`导入 Unity 项目目录`Assets/Plugins/Android/`
