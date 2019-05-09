@@ -51,7 +51,7 @@ GrowingIO Unity 平台埋点SDK
 
 
  参数名称   | 限制条件
- ---     |---  | -------- 
+ ---       |---  | -------- 
  eventId  | 非空，长度限制小于等于50。
  number   | 非空。
  variable | value 传入`string` 或者基本数值类型，对于嵌套的对应，会统一转换成`string`,key 长度限制小于等于50，value长度小于等于1000。
