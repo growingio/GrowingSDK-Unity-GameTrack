@@ -8,40 +8,40 @@ GrowingIO Unity 平台埋点SDK
 
 **事件类型以及对应函数如下**
 
-1. track：发送自定义事件，对应于`cstm`事件，提供以下4个函数：
+1. Track：发送自定义事件，对应于`cstm`事件，提供以下4个函数：
     ```C#
     public static void Track(string eventId)
     public static void Track(string eventId, double number)
     public static void Track(string eventId, Dictionary<string, object> variable)
     public static void Track(string eventId, double number, Dictionary<string, object> variable)
     ```
-2. setEvar：发送转化变量，对应于`evar` 事件，提供以下3个函数：
+2. SetEvar：发送转化变量，对应于`evar` 事件，提供以下3个函数：
     
     ```C#
     public static void SetEvar(string key, string value)
     public static void SetEvar(string key, double number)
     public static void SetEvar(Dictionary<string, object> variable)
     ```
-3. setPeopleVariable：发送用户变量，对应于`ppl`事件，提供以下3个函数：
+3. SetPeopleVariable：发送用户变量，对应于`ppl`事件，提供以下3个函数：
     
     ```C#
     public static void SetPeopleVariable(string key, string value)
     public static void SetPeopleVariable(string key, double number)
     public static void SetPeopleVariable(Dictionary<string, object> variable)
     ```
-4. setVisitor：设置访问用户变量，对应于`vstr`事件，提供函数如下：
+4. SetVisitor：设置访问用户变量，对应于`vstr`事件，提供函数如下：
     
     ```C#
     public static void SetVisitor(Dictionary<string, object> variable)
     ```
 
-5. setUserId：设置登录用户Id，对应于`cs1`字段，提供函数如下：
+5. SetUserId：设置登录用户Id，对应于`cs1`字段，提供函数如下：
     
     ```C#
     public static void SetUserId(string userId)
     ```
 
-6. clearUserId：清除登录用户Id，提供函数如下：
+6. ClearUserId：清除登录用户Id，提供函数如下：
     
     ```C#
     public static void ClearUserId()
@@ -49,8 +49,9 @@ GrowingIO Unity 平台埋点SDK
 
 **参数限制条件**
 
+
  参数名称   | 限制条件
- ---    |---  | -------- 
+ ---     |---  | -------- 
  eventId  | 非空，长度限制小于等于50。
  number   | 非空。
  variable | value 传入`string` 或者基本数值类型，对于嵌套的对应，会统一转换成`string`,key 长度限制小于等于50，value长度小于等于1000。
@@ -128,7 +129,6 @@ GrowingIO.startWithConfiguration(this,new Configuration()
     [Growing setEnableLog:YES];
     return YES;
 }
-
 ```
 
 ### 二. 集成步骤
